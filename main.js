@@ -2,6 +2,7 @@ let $todoInput; // miejsce gdzie user wpisuje treść zadania
 let $alertInfo; // info o braku zadań lub konieczności dodania tekstu
 let $addBtn; // przycisk dodaje nowe elementy do listy
 let $ulList; // lista zadań
+let $newTask; // nowe zadanie
 
 const main = () => {
     prepareDOMElements();
@@ -17,6 +18,20 @@ const prepareDOMElements = () => {
 };
 
 // nadajemy nasłuchiwanie
-const prepareDOMEvents = () => {};
+const prepareDOMEvents = () => {
+    $addBtn.addEventListener('click', addNewTask);
+};
+
+const addNewTask = () => {
+    if ($todoInput.value !== '') {
+        $newTask = document.createElement('li');
+        $newTask.innerText = $todoInput.value;
+        $ulList.appendChild($newTask);
+        $todoInput.value = '';
+        $alertInfo.innerText = '';
+    } else {
+        $alertInfo.innerText = 'Wpisz treść zadania!';
+    }
+};
 
 document.addEventListener('DOMContentLoaded', main);
