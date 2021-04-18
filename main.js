@@ -10,6 +10,7 @@ let $popupInput; // teskst wpisywany w inputa w popup'ie
 let $addPopupBtn; // przycisk "zatwierdź" w popup'ie
 let $closeTodoBtn; // przycisk do zamykania popup'a
 let $idNumber = 0;
+let $allTasks;
 
 const main = () => {
     prepareDOMElements();
@@ -27,6 +28,7 @@ const prepareDOMElements = () => {
     $popupInput = document.querySelector('.popupInput');
     $addPopupBtn = document.querySelector('.accept');
     $closeTodoBtn = document.querySelector('.cancel');
+    $allTasks = $ulList.getElementsByTagName('li');
 };
 
 // nadajemy nasłuchiwanie
@@ -35,6 +37,7 @@ const prepareDOMEvents = () => {
     $ulList.addEventListener('click', checkClick);
     $closeTodoBt.addEventListener('click', closePopup);
     $addPopupBtn.addEventListener('click', changeTodo);
+    $todoInput.addEventListener('keyup', enterCheck);
 };
 
 // dodajemy nowy element do listy
@@ -52,6 +55,12 @@ const addNewTask = () => {
         $alertInfo.innerText = 'Wpisz treść zadania!';
     }
 };
+
+const enterCheck = () => {
+    if (event.keyCode === 13) {
+        addNewTask();
+    }
+}
 
 // tworzymy przyciski edycji, usuwania i "gotowe"
 const createToolsArea = () => {
@@ -84,7 +93,7 @@ const checkClick = (e) => {
     } else if (e.target.closest('button').className === 'edit') {
         editTask(e);
     } else if (e.target.closest('button').className === 'delete')
-        console.log('delete');
+        deleteTask(e);
 }
 
 // edycja zadania
@@ -95,6 +104,7 @@ const editTask = (e) => {
     $popup.style.display = 'flex';
 }
 
+// sprawdza czy popup nie jest pusty i zmienia treść zadania
 const changeTodo = () => {
     if ($popupInput.value !== '') {
         $editedTodo.firstChild.textContent = $popupInput.value;
@@ -108,6 +118,17 @@ const changeTodo = () => {
 // zamykanie popup'a
 const closePopup = () => {
     $popup.style.display = 'none';
+    $popupInfo.innerText = '';
+}
+
+// usuwanie zadania
+const deleteTask = (e) => {
+    const deleteTodo = e.target.closest('li');
+    deleteTodo.remove();
+
+    if ($allTasks.length === 0) {
+        $alertInfo.innerText = 'Brak zadań na liście.';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', main);
