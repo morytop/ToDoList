@@ -3,13 +3,13 @@ let $alertInfo; // info o braku zadań lub konieczności dodania tekstu
 let $addBtn; // przycisk dodaje nowe elementy do listy
 let $ulList; // lista zadań
 let $newTask; // nowe zadanie
-
 let $popup; // pobrany popup
 let $popupInfo; // alert w popupie, jak się doda pusty tekst
 let $editedTodo; // edytowany Todo
 let $popupInput; // teskst wpisywany w inputa w popup'ie
 let $addPopupBtn; // przycisk "zatwierdź" w popup'ie
 let $closeTodoBtn; // przycisk do zamykania popup'a
+let $idNumber = 0;
 
 const main = () => {
     prepareDOMElements();
@@ -34,14 +34,16 @@ const prepareDOMEvents = () => {
     $addBtn.addEventListener('click', addNewTask);
     $ulList.addEventListener('click', checkClick);
     $closeTodoBt.addEventListener('click', closePopup);
+    $addPopupBtn.addEventListener('click', changeTodo);
 };
 
 // dodajemy nowy element do listy
 const addNewTask = () => {
     if ($todoInput.value !== '') {
+        $idNumber++;
         $newTask = document.createElement('li');
         $newTask.innerText = $todoInput.value;
-
+        $newTask.setAttribute('id', `todo-${$idNumber}`);
         $ulList.appendChild($newTask);
         $todoInput.value = '';
         $alertInfo.innerText = '';
@@ -80,17 +82,32 @@ const checkClick = (e) => {
         e.target.closest('li').classList.toggle('completed');
         e.target.closest('button').classList.toggle('completed');
     } else if (e.target.closest('button').className === 'edit') {
-        console.log('edit');
+        editTask(e);
     } else if (e.target.closest('button').className === 'delete')
         console.log('delete');
 }
 
-const editTask = () => {
+// edycja zadania
+const editTask = (e) => {
+    const oldTodo = e.target.closest('li').id;
+    $editedTodo = document.getElementById(oldTodo);
+    $popupInput.value = $editedTodo.firstChild.textContent;
     $popup.style.display = 'flex';
 }
 
+const changeTodo = () => {
+    if ($popupInput.value !== '') {
+        $editedTodo.firstChild.textContent = $popupInput.value;
+        $popup.style.display = 'none';
+        $popupInfo.innerText = '';
+    } else {
+        $popupInfo.innerText = 'Musisz podać jakąś treść!'
+    }
+}
+
+// zamykanie popup'a
 const closePopup = () => {
-    $popup.style.display = 'flex';
+    $popup.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', main);
