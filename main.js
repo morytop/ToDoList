@@ -10,14 +10,14 @@ let $popupInput; // teskst wpisywany w inputa w popup'ie
 let $addPopupBtn; // przycisk "zatwierdź" w popup'ie
 let $closeTodoBtn; // przycisk do zamykania popup'a
 let $idNumber = 0;
-let $allTasks;
+let $allTasks; // lista wszystkich dodanych zadań
 
 const main = () => {
     prepareDOMElements();
     prepareDOMEvents();
 };
 
-// pobieramy elementy
+// pobiera elementy
 const prepareDOMElements = () => {
     $todoInput = document.querySelector('.todoInput');
     $alertInfo = document.querySelector('.alertInfo');
@@ -31,16 +31,16 @@ const prepareDOMElements = () => {
     $allTasks = $ulList.getElementsByTagName('li');
 };
 
-// nadajemy nasłuchiwanie
+// nadaje nasłuchiwanie
 const prepareDOMEvents = () => {
     $addBtn.addEventListener('click', addNewTask);
     $ulList.addEventListener('click', checkClick);
-    $closeTodoBt.addEventListener('click', closePopup);
+    $closeTodoBtn.addEventListener('click', closePopup);
     $addPopupBtn.addEventListener('click', changeTodo);
     $todoInput.addEventListener('keyup', enterCheck);
 };
 
-// dodajemy nowy element do listy
+// dodaje nowy element do listy
 const addNewTask = () => {
     if ($todoInput.value !== '') {
         $idNumber++;
@@ -62,7 +62,7 @@ const enterCheck = () => {
     }
 }
 
-// tworzymy przyciski edycji, usuwania i "gotowe"
+// tworzy przyciski edycji, usuwania i "gotowe"
 const createToolsArea = () => {
     const toolsPanel = document.createElement('div');
     toolsPanel.classList.add('tools');
@@ -85,7 +85,7 @@ const createToolsArea = () => {
     toolsPanel.appendChild(deleteBtn);
 }
 
-// zarządzenie kliknięciami w przyciski
+// zarządza kliknięciami w przyciski
 const checkClick = (e) => {
     if (e.target.closest('button').classList.contains('complete')) {
         e.target.closest('li').classList.toggle('completed');
